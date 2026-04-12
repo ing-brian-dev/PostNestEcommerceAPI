@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 //To use Active Record you must have to extends from BaseEntity
 //Data Maper is the Default
@@ -13,4 +13,14 @@ export class Category {
         length: 60
     })
     declare name: string;
+
+    @CreateDateColumn()
+    declare created: Date;
+
+    @UpdateDateColumn()
+    declare updated: Date;
+
+    // Add this column to your entity!
+    @DeleteDateColumn()
+    declare deletedAt?: Date;
 }
