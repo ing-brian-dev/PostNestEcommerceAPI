@@ -10,7 +10,7 @@ export class CategoriesService {
 
   constructor(
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>
-  ) { }
+  ) {}
 
   create(createCategoryDto: CreateCategoryDto) {
     return this.categoryRepository.save(createCategoryDto);
@@ -34,7 +34,10 @@ export class CategoriesService {
     return await this.categoryRepository.save(category);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    await this.findOne(id); // validate
+    await this.categoryRepository.softDelete(id);
+    // await this.categoryRepository.remove(id); Remove completely, can remove one or many in an array [id,...]
+    return "Categoria eliminada."
   }
 }
