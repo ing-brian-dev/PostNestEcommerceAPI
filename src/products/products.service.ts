@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,8 +14,19 @@ export class ProductsService {
     @InjectRepository(Category) private readonly categoryRepository : Repository<Category>
   ){}
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(createProductDto: CreateProductDto) {
+
+    const category = await this.categoryRepository.findOneBy({id: createProductDto.categoryId});
+    if(!category) {
+      let errors : string[] = [];
+      errors.push('La categoria no existe');
+      throw new NotFoundException(errors)
+    }
+
+    return this.productRepository.save({
+      ...createProductDto,
+      category
+    })
   }
 
   findAll() {
