@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { TransactionContests } from "./transaction-content.entity";
 
 @Entity()
 export class Transaction {
@@ -8,7 +9,7 @@ export class Transaction {
     @Column('decimal')
     declare total: number;
 
-    
+
 
     @CreateDateColumn()
     declare createdAt: Date;
@@ -19,4 +20,8 @@ export class Transaction {
     @DeleteDateColumn()
     declare deletedAt?: Date;
 
+
+
+    @OneToMany(() => TransactionContests, (transaction) => transaction.transaction)
+    declare contents: TransactionContests[];
 }
