@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { TransactionContests } from "./transaction-content.entity";
+import { TransactionContents } from "./transaction-content.entity";
 
 @Entity()
 export class Transaction {
@@ -22,6 +22,6 @@ export class Transaction {
 
 
 
-    @OneToMany(() => TransactionContests, (transaction) => transaction.transaction)
-    declare contents: TransactionContests[];
+    @OneToMany(() => TransactionContents, (transaction) => transaction.transaction)
+    declare contents: TransactionContents[];
 }
