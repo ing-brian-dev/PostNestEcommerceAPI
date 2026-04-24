@@ -3,9 +3,10 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
-import { Repository } from 'typeorm';
+import { Between, FindManyOptions, Repository } from 'typeorm';
 import { TransactionContents } from './entities/transaction-content.entity';
 import { Product } from '../products/entities/product.entity';
+import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
@@ -23,7 +24,7 @@ export class TransactionsService {
       transaction.total = createTransactionDto.contents.reduce((total, item) => total + (item.quantity * item.price), 0);
       await transactionEntityManager.save(transaction);
 
-      const errors : string[] = [];
+      const errors: string[] = [];
 
       for (const contents of createTransactionDto.contents) {
 
@@ -56,8 +57,28 @@ export class TransactionsService {
     return 'Venta almacenada correctamente.';
   }
 
-  findAll() {
-    return `This action returns all transactions`;
+  findAll(createdAt?: string) {
+    const options: FindManyOptions<Transaction> = {
+      relations: {
+        contents: true
+      }
+    }
+    if (createdAt) {
+      const date = parseISO(createdAt);
+      if (!isValid(date)) {
+        throw new BadRequestException('Fecha no válida');
+      }
+      
+      const start = startOfDay(date);
+      const end = endOfDay(date);
+
+      options.where = {
+        createdAt: Between(start, end)
+      }
+
+    }
+
+    return this.transactionRespository.find(options);
   }
 
   findOne(id: number) {
