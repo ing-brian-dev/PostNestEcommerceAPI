@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,8 +9,8 @@ import { Repository } from 'typeorm';
 export class CouponsService {
 
   constructor(
-    @InjectRepository(Coupon) private readonly couponRepository : Repository<Coupon>
-  ){}
+    @InjectRepository(Coupon) private readonly couponRepository: Repository<Coupon>
+  ) { }
 
   create(createCouponDto: CreateCouponDto) {
     return this.couponRepository.save(createCouponDto);
@@ -20,12 +20,19 @@ export class CouponsService {
     return this.couponRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} coupon`;
+  async findOne(id: number) {
+    const coupon = await this.couponRepository.findOneBy({ id });
+
+    if (!coupon) {
+      throw new NotFoundException(`El cupon con el Id: ${id} no fue encontrado.`)
+    }
+    return coupon;
   }
 
-  update(id: number, updateCouponDto: UpdateCouponDto) {
-    return `This action updates a #${id} coupon`;
+  async update(id: number, updateCouponDto: UpdateCouponDto) {
+    const coupon = await this.findOne(id);
+    Object.assign(coupon, updateCouponDto);
+    return await this.couponRepository.save(coupon);
   }
 
   remove(id: number) {
