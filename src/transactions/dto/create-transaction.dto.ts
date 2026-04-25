@@ -21,7 +21,7 @@ export class CreateTransactionDto {
   declare total: number;
 
   @IsOptional()
-  declare coupon: string;
+  declare coupon_name: string;
 
   @IsArray()
   @ArrayNotEmpty({ message: 'Los Contenidos no pueden ir vacios' })

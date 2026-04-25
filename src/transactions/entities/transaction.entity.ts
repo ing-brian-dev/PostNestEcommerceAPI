@@ -14,7 +14,7 @@ export class Transaction {
         length: 30,
         nullable: true
     })
-    declare coupon: number;
+    declare coupon_name: string;
 
     @Column({
         type: 'decimal',
