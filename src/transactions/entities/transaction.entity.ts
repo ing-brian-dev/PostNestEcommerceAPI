@@ -9,6 +9,19 @@ export class Transaction {
     @Column('decimal')
     declare total: number;
 
+    @Column({
+        type: 'varchar',
+        length: 30,
+        nullable: true
+    })
+    declare coupon_name: string;
+
+    @Column({
+        type: 'decimal',
+        nullable: true
+    })
+    declare discount: number;
+
 
 
     @CreateDateColumn()

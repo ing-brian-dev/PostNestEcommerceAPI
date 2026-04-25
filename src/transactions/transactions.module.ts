@@ -5,10 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { TransactionContents } from './entities/transaction-content.entity';
 import { Product } from '../products/entities/product.entity';
+import { CouponsModule } from '../coupons/coupons.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Transaction,TransactionContents,Product])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Transaction,
+      TransactionContents,
+      Product,
+    ]),
+    CouponsModule
+  ],
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })
-export class TransactionsModule {}
+export class TransactionsModule { }
