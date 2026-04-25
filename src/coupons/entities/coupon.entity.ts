@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Coupon {
@@ -23,4 +23,15 @@ export class Coupon {
         type: 'date'
     })
     declare expirationDate: Date;
+
+
+
+    @CreateDateColumn()
+    declare createdAt: Date;
+
+    @UpdateDateColumn()
+    declare updatedAt: Date;
+
+    @DeleteDateColumn()
+    declare deletedAt?: Date;
 }
