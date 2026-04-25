@@ -15,13 +15,14 @@ export class Category {
     })
     declare name: string;
 
+
+
     @CreateDateColumn()
-    declare created: Date;
+    declare createdAt: Date;
 
     @UpdateDateColumn()
-    declare updated: Date;
+    declare updatedAt: Date;
 
-    // Add this column to your entity!
     @DeleteDateColumn()
     declare deletedAt?: Date;
 
