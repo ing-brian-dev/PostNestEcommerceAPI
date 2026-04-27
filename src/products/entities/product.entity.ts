@@ -16,7 +16,7 @@ export class Product {
         type: 'varchar',
         length: 120,
         nullable: true,
-        default: 'default.sgv'
+        default: 'default.svg'
     })
     declare image: string;
 
