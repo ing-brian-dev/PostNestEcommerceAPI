@@ -30,8 +30,11 @@ export class Product {
     })
     declare inventory: number;
 
+    @Column({ type: 'int' })
+    declare categoryId: number;
 
-    
+
+
     @CreateDateColumn()
     declare createdAt: Date;
 
@@ -40,6 +43,8 @@ export class Product {
 
     @DeleteDateColumn()
     declare deletedAt?: Date;
+
+    
 
     @ManyToOne(() => Category)
     declare category: Category;
