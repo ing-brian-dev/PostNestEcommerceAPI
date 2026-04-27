@@ -18,7 +18,7 @@ export class Product {
         nullable: true,
         default: 'default.sgv'
     })
-    declare image: number;
+    declare image: string;
 
     @Column({
         type: 'decimal'
