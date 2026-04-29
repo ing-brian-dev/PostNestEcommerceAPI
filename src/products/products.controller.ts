@@ -18,9 +18,9 @@ export class ProductsController {
   findAll(@Query() query: GetProductsQueryDto) {
     const category = query.category_id ?? null;
     const take = query.take ?? 10;
-    const perPage = query.per_page ?? 0
+    const skip = query.skip ?? 0
     
-    return this.productsService.findAll(category,take,perPage);
+    return this.productsService.findAll(category,take,skip);
   }
 
   @Get(':id')

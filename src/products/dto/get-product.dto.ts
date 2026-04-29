@@ -13,5 +13,5 @@ export class GetProductsQueryDto {
 
     @IsOptional()
     @IsNumberString({}, { message: 'La cantidad debe ser numerica' })
-    declare per_page?: number
+    declare skip?: number
 }
