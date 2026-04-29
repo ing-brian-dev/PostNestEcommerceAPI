@@ -93,6 +93,6 @@ export class ProductsService {
   async remove(id: number) {
     await this.findOne(id);
     await this.productRepository.softDelete(id);
-    return `Producto: ${id} eliminado.`;
+    return {message: `Producto: ${id} eliminado.`};
   }
 }
