@@ -41,6 +41,14 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
+  @Delete('delete-image')
+  deleteImage(@Body('publicId') publicId: string) {
+    if (!publicId) {
+      throw new BadRequestException('El publicId es Obligatorio.');
+    }
+    return this.uploadImageService.deleteFile(publicId);
+  }
+
   @Delete(':id')
   remove(@Param('id', IdValidationPipe) id: string) {
     return this.productsService.remove(+id);
@@ -54,4 +62,5 @@ export class ProductsController {
     }
     return this.uploadImageService.uploadFile(file)
   }
+
 }
