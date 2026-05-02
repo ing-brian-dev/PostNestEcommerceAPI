@@ -13,6 +13,9 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'La imagen es requerida.' })
     declare image: string;
 
+    @IsNotEmpty({ message: 'El id de la imagen es requerido.' })
+    declare image_public_id: string;
+
     @IsNotEmpty({ message: 'El inventario es requerido.' })
     @IsInt({ message: 'El valor del inventario debe ser un número entero.' })
     declare inventory: number;

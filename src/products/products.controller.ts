@@ -46,7 +46,7 @@ export class ProductsController {
     if (!publicId) {
       throw new BadRequestException('El publicId es Obligatorio.');
     }
-    return this.uploadImageService.deleteFile(publicId);
+    return this.productsService.deleteImageByPublicId(publicId)
   }
 
   @Delete(':id')

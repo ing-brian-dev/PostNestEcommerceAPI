@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Category } from '../categories/entities/category.entity';
+import { UploadImageService } from '../upload-image/upload-image.service';
 
 @Injectable()
 export class ProductsService {
@@ -13,6 +14,7 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    private readonly uploadImageService: UploadImageService,
   ) { }
 
   async create(createProductDto: CreateProductDto) {
@@ -61,8 +63,8 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepository.findOne({ 
-      where: { id }, 
+    const product = await this.productRepository.findOne({
+      where: { id },
       relations: {
         category: true
       }
@@ -77,12 +79,12 @@ export class ProductsService {
   async update(id: number, updateProductDto: UpdateProductDto) {
     const product = await this.findOne(id);
 
-    Object.assign(product,updateProductDto);
+    Object.assign(product, updateProductDto);
 
-    if(updateProductDto.categoryId) {
-      const category = await this.categoryRepository.findBy({id: updateProductDto.categoryId});
-      if(!category) {
-        let errors : string[] = [];
+    if (updateProductDto.categoryId) {
+      const category = await this.categoryRepository.findBy({ id: updateProductDto.categoryId });
+      if (!category) {
+        let errors: string[] = [];
         errors.push('La categoría no existe.');
         throw new NotFoundException(errors);
       }
@@ -93,6 +95,27 @@ export class ProductsService {
   async remove(id: number) {
     await this.findOne(id);
     await this.productRepository.softDelete(id);
-    return {message: `Producto: ${id} eliminado.`};
+    return { message: `Producto: ${id} eliminado.` };
+  }
+
+  async deleteImageByPublicId(publicId: string) {
+
+    try {
+      await this.uploadImageService.deleteFile(publicId);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `No se pudo eliminar la imagen en Cloudinary error: ${error}`,
+      );
+    }
+    
+    const product = await this.productRepository.findOneBy({ image_public_id: publicId });
+    if (!product) {
+      throw new NotFoundException(`No se encontró un producto con la imagen: ${publicId}`);
+    }
+
+    product.image = null;
+    product.image_public_id = null;
+    await this.productRepository.save(product);
+    return { message: `Imagen con publicId: ${publicId} eliminada del producto ${product.id}.` };
   }
 }
