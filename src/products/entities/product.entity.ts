@@ -16,9 +16,15 @@ export class Product {
         type: 'varchar',
         length: 120,
         nullable: true,
-        default: 'default.svg'
     })
-    declare image: string;
+    declare image: string | null;
+
+    @Column({
+        type: 'varchar',
+        length: 60,
+        nullable: true,
+    })
+    declare image_public_id: string | null;
 
     @Column({
         type: 'decimal'
@@ -44,7 +50,7 @@ export class Product {
     @DeleteDateColumn()
     declare deletedAt?: Date;
 
-    
+
 
     @ManyToOne(() => Category)
     declare category: Category;

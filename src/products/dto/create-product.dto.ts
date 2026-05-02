@@ -7,8 +7,14 @@ export class CreateProductDto {
     declare name: string;
 
     @IsNotEmpty({ message: 'El precio es requerido.' })
-    @IsNumber({ maxDecimalPlaces: 2 }, {message : 'El precio solo debe tener 2 decimales.'})
+    @IsNumber({ maxDecimalPlaces: 2 }, { message: 'El precio solo debe tener 2 decimales.' })
     declare price: number;
+
+    @IsNotEmpty({ message: 'La imagen es requerida.' })
+    declare image: string;
+
+    @IsNotEmpty({ message: 'El id de la imagen es requerido.' })
+    declare image_public_id: string;
 
     @IsNotEmpty({ message: 'El inventario es requerido.' })
     @IsInt({ message: 'El valor del inventario debe ser un número entero.' })
